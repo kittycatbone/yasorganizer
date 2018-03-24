@@ -1,0 +1,23 @@
+<div class="login-div center-div"  *ngIf="!userDetails.name; else welcome">
+  <div>
+    <p>Login with your google account:</p>
+  </div>
+  <div>
+    <!-- <div class="g-signin2 login-button" (click)="signIn()"></div> -->
+    <div class="login-button" id="my-gsignin2" ></div>
+    <p></p>
+  </div>
+</div>
+<ng-template #loading><div class="login-div center-div"><p>Loading...</p></div></ng-template>
+<ng-template #welcome></ng-template>
+  <div class="center-div">
+    <div>
+      <img alt="Profile Pic" src="{{userDetails.imageUrl}}">
+    </div>
+    <div *ngIf="userDetails.name">
+      <h2>Hello {{userDetails.name}}!!</h2>
+      <p>
+        <span class="btn btn-primary" (click)="signOut()">Sign out</span>
+      </p>
+    </div>
+  </div>

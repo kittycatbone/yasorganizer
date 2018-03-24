@@ -1,1 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
+* {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.center-div {
+    margin: 10 auto;
+    text-align: center;
+    /* padding: 10px; */
+}
+
+.pad-2 {
+    padding: 2px;
+}
+
+.pad-8 {
+    padding: 8px;
+}
