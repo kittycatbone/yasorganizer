@@ -1,66 +1,107 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, Input } from '@angular/core';
 import { UserDetails } from '../user-details';
 import { UserProfileService } from '../user-profile.service';
 import { AuthenticationService } from '../authentication.service';
+import { AppComponent } from '../app.component';
+import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 declare var gapi: any;
-
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
+  // @Input()
+  userSubscription: Subscription;
+  routeSubscription: Subscription;
+  navurlSubscription: Subscription;
+  userDetails: UserDetails;
+  msg = '';
 
-  userDetails: UserDetails = new UserDetails();
-  pageReady = false;
-
-  constructor(private authenticationService: AuthenticationService,
-              private userProfileService: UserProfileService,
-              private ref: ChangeDetectorRef) {
-  }
+  constructor(
+    private authenticationService: AuthenticationService,
+    private userProfileService: UserProfileService,
+    private ref: ChangeDetectorRef,
+    private app: AppComponent,
+    private route: ActivatedRoute,
+    private router: Router) {
+      app.title = 'Organizer for Yasmin';
+      this.routeSubscription = route.data.subscribe((data) => {
+        this.msg = data.msg;
+        // if (data.redirectUrl !== undefined) {
+        //   this.router.navigateByUrl(data.redirectUrl);
+        //   console.log(data.redirectUrl);
+        // }
+      });
+      console.log('NG CONSTRUCT');
+    }
 
   ngOnInit() {
+    this.userSubscription =
+      this.userProfileService.getProfileObs()
+        .subscribe(
+          (user) => {
+            this.userDetails = user;
+            console.log('user observable updated');
+            this.ref.detectChanges();
+            console.log('detect changes');
+          },
+          (error) => {
+            console.log('error updating observable');
+            console.log(error);
+          }
+        );
     this.authenticationService.whenReady
-      .then(() => {
-                    if (this.authenticationService.auth2.isSignedIn.get()) {
-                      this.getProfile(true);
-                    }
-                    else {
-                      this.renderSignIn();
-                    }
-                    this.pageReady = true;
-                  },
-            (error) => console.error(error));
+      .then(
+        () => {
+          if (!this.authenticationService.isSignedIn) {
+            this.renderSignIn();
+          }
+        },
+        (error) => console.error(error));
+  }
+
+  ngOnDestroy() {
+    this.userSubscription.unsubscribe();
+    this.routeSubscription.unsubscribe();
+    if (this.navurlSubscription !== undefined) {
+      this.navurlSubscription.unsubscribe();
+    }
   }
 
   async signOut() {
     await this.authenticationService.signOut();
-    this.getProfile(false);
+    this.authenticationService.setSignIn();
+    this.getProfile();
     this.renderSignIn();
   }
 
   signInListen() {
     console.log('listening to sign in');
-    this.authenticationService.signInListen(isSignedIn => this.getProfile(isSignedIn));
+    this.authenticationService.signInListen(() => this.getProfile());
   }
 
   signIn(googleUser) {
     console.log('signed in');
-    this.getProfile(true);
+    this.authenticationService.setSignIn();
+    this.getProfile();
   }
 
-  getProfile(isSignedIn) {
-    if (isSignedIn) {
-      this.userDetails = this.userProfileService.getProfile();
-      console.log('retrieved profile');
-    } else {
-      this.userDetails.resetValues();
-      console.log('no user logged in');
-    }
-
-    this.ref.detectChanges();
+  getProfile() {
+    this.userProfileService.updateProfile();
+    // this.navurlSubscription =
+      this.route.data.subscribe((data) => {
+        console.log('check1');
+        if (data.redirectUrl !== undefined) {
+          console.log('check2');
+          this.router.navigateByUrl(data.redirectUrl);
+        }
+      }).unsubscribe();
   }
 
   renderSignIn() {

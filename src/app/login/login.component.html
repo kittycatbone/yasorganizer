@@ -1,4 +1,7 @@
-<div class="login-div center-div"  *ngIf="!userDetails.name; else welcome">
+<div class="login-div center-div"  *ngIf="!(userDetails)?.name; else welcome">
+  <div class="message">
+    <span>{{ msg }}</span>
+  </div>
   <div>
     <p>Login with your google account:</p>
   </div>
@@ -10,14 +13,14 @@
 </div>
 <ng-template #loading><div class="login-div center-div"><p>Loading...</p></div></ng-template>
 <ng-template #welcome></ng-template>
-  <div class="center-div">
-    <div>
-      <img alt="Profile Pic" src="{{userDetails.imageUrl}}">
-    </div>
-    <div *ngIf="userDetails.name">
-      <h2>Hello {{userDetails.name}}!!</h2>
-      <p>
-        <span class="btn btn-primary" (click)="signOut()">Sign out</span>
-      </p>
-    </div>
+<div class="center-div">
+  <div>
+    <img alt="Profile Pic" [src]="userDetails.imageUrl">
   </div>
+  <div *ngIf="(userDetails)?.name">
+    <h2>Hello {{userDetails.name}}!!</h2>
+    <p>
+      <span class="btn btn-primary" (click)="signOut()">Sign out</span>
+    </p>
+  </div>
+</div>

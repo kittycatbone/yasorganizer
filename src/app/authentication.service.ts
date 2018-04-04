@@ -4,8 +4,9 @@ declare var gapi: any;
 
 @Injectable()
 export class AuthenticationService {
-  auth2;
-  whenReady;
+  private auth2;
+  whenReady: Promise<any>;
+  public isSignedIn: boolean;
 
   constructor() {
     this.whenReady =
@@ -32,8 +33,12 @@ export class AuthenticationService {
       });
     }
 
-    return this.auth2.then(() => console.log('initiated auth2'),
-                    (error) => console.error(error));
+    return this.auth2
+      .then(() => {
+        this.isSignedIn = this.auth2.isSignedIn.get();
+        console.log('initiated auth2');
+      },
+      (error) => console.error(error));
   }
 
   getAuth() {
@@ -42,8 +47,9 @@ export class AuthenticationService {
 
   signInListen(listener) {
     // check if already signed in
-    if (this.auth2.isSignedIn.get()) {
+    if (this.isSignedIn) {
       this.auth2.signOut();
+      this.isSignedIn = false;
     }
 
     this.auth2.isSignedIn.listen(listener);
@@ -52,7 +58,19 @@ export class AuthenticationService {
   signOut() {
     console.log('now signing out...');
     return this.auth2.signOut();
-      // .then(function () { console.log('User signed out.'); });
   }
 
+  setSignIn() {
+    this.isSignedIn = this.auth2.isSignedIn.get();
+  }
+
+  async checkSignedIn(): Promise<boolean> {
+    await this.whenReady;
+
+    return this.isSignedIn;
+  }
+
+  getCurrentUser() {
+    return this.auth2.currentUser.get();
+  }
 }

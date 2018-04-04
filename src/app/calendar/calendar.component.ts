@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AppComponent } from '../app.component';
+import { CalendarDayComponent } from '../calendar-day/calendar-day.component';
 
 @Component({
   selector: 'app-calendar',
@@ -7,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CalendarComponent implements OnInit {
 
-  constructor() { }
+  constructor(private app: AppComponent) {
+  }
 
   ngOnInit() {
+    console.log('INIT CALENDAR');
+    this.app.title = 'Calendar View';
   }
 
 }

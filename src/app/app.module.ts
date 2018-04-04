@@ -9,12 +9,27 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { AuthenticationService } from './authentication.service';
 import { TasksComponent } from './tasks/tasks.component';
 import { CalendarComponent } from './calendar/calendar.component';
+import { CalendarDayComponent } from './calendar-day/calendar-day.component';
+import { AuthGuardService } from './auth-guard.service';
 
 const appRoutes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'tasks', component: TasksComponent },
-  { path: 'calendar', component: CalendarComponent },
-  { path: '',
+  {
+    path: 'login',
+    component: LoginComponent,
+    data: { msg: '' }
+  },
+  {
+    path: 'tasks',
+    component: TasksComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'calendar',
+    component: CalendarComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: '',
     redirectTo: '/login',
     pathMatch: 'full'
   },
@@ -27,17 +42,19 @@ const appRoutes: Routes = [
     LoginComponent,
     NavbarComponent,
     TasksComponent,
-    CalendarComponent
+    CalendarComponent,
+    CalendarDayComponent
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot(
       appRoutes,
-      { enableTracing: true })
+      { enableTracing: false })
   ],
   providers: [
     AuthenticationService,
-    UserProfileService
+    UserProfileService,
+    AuthGuardService
   ],
   bootstrap: [AppComponent]
 })

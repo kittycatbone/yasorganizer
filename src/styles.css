@@ -16,3 +16,13 @@
 .pad-8 {
     padding: 8px;
 }
+
+.message {
+    color: #ff0000;
+    font-weight: 100;
+    font-size: smaller;
+}
+
+.round-pic {
+    border-radius: 100%;
+}

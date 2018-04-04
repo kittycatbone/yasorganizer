@@ -18,9 +18,9 @@
         <li routerLinkActive="active"><a routerLink="calendar" id="calendar-menu">Calendar</a></li>
       </ul>
       <!-- Login menu - for logged in user -->
-      <ul class="nav navbar-nav navbar-right" *ngIf="userDetails.name; else guest">
+      <ul class="nav navbar-nav navbar-right" *ngIf="(userDetails)?.name; else guest">
         <li><span class="navbar-text">Hello {{userDetails.givenName}}!</span></li>
-        <li><img class="navbar-brand" alt="User" src="{{userDetails.imageUrl}}"></li>
+        <li><img class="navbar-brand round-pic" alt="User" src="{{userDetails.imageUrl}}"></li>
         <li class="dropdown">
            <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
               <span class="caret"></span>

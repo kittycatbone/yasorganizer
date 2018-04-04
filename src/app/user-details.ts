@@ -1,3 +1,5 @@
+import { DEFAULT_PIC } from './constants';
+
 export class UserDetails {
     name: string;
     imageUrl: string;
@@ -8,7 +10,7 @@ export class UserDetails {
     constructor() {
         this.name = '';
         this.email = '';
-        this.imageUrl = '../../assets/default-pic.gif';
+        this.imageUrl = DEFAULT_PIC;
         this.givenName = '';
         this.familyName = '';
     }
@@ -16,7 +18,7 @@ export class UserDetails {
     resetValues() {
         this.name = '';
         this.email = '';
-        this.imageUrl = '../../assets/default-pic.gif';
+        this.imageUrl = DEFAULT_PIC;
         this.givenName = '';
         this.familyName = '';
     }

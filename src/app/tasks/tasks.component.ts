@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-tasks',
@@ -7,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TasksComponent implements OnInit {
 
-  constructor() { }
+  constructor(private app: AppComponent) {
+    app.title = 'Tasks View';
+   }
 
   ngOnInit() {
   }
