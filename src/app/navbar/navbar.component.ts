@@ -5,6 +5,7 @@ import { UserProfileService } from '../user-profile.service';
 import { AppComponent } from '../app.component';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -20,7 +21,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
   constructor(
     private authenticationService: AuthenticationService,
     private userProfileService: UserProfileService,
-    private ref: ChangeDetectorRef) {
+    private ref: ChangeDetectorRef,
+    private route: ActivatedRoute,
+    private router: Router) {
   }
 
   ngOnInit() {
@@ -41,8 +44,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .then(() => {
         if (this.authenticationService.isSignedIn) {
           console.log('rendering signin button');
-          gapi.signin2.render('google-login', {
-            'scope': 'profile email',
+          gapi.signin2.render('my-gsignin2', {
             'width': 160,
             'longtitle': false,
             'theme': '',
@@ -58,18 +60,28 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.userSubscription.unsubscribe();
   }
 
-  signIn() {
-    this.userProfileService.updateProfile();
+  async signOut() {
+    await this.authenticationService.signOut();
+    this.authenticationService.setSignIn();
+    this.getProfile();
   }
 
-  getProfile(isSignedIn) {
-    if (isSignedIn) {
-      this.userDetails = this.userProfileService.getProfile();
-      this.ref.detectChanges();
-      console.log('retrieved profile');
-    } else {
-      console.log('no user logged in');
-    }
+  signIn(googleUser) {
+    console.log('signed in');
+    this.authenticationService.setSignIn();
+    this.getProfile();
   }
+
+  getProfile() {
+    this.userProfileService.updateProfile();
+    this.route.data.subscribe((data) => {
+      console.log('check1');
+      if (data.redirectUrl !== undefined) {
+        console.log('check2');
+        this.router.navigate([data.redirectUrl]);
+      }
+    }).unsubscribe();
+  }
+
 
 }

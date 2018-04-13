@@ -9,7 +9,7 @@ import { AppComponent } from '../app.component';
 export class TasksComponent implements OnInit {
 
   constructor(private app: AppComponent) {
-    app.title = 'Tasks View';
+    app.titleSubject.next('Tasks View');
    }
 
   ngOnInit() {

@@ -1,4 +1,10 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Subscriber } from 'rxjs/Subscriber';
+import { Subject } from 'rxjs/Subject';
+import { retryWhen, catchError, takeWhile } from 'rxjs/operators';
+import { of } from 'rxjs/observable/of';
+import { _throw } from 'rxjs/observable/throw';
 
 declare var gapi: any;
 
@@ -29,7 +35,8 @@ export class AuthenticationService {
     if (this.auth2 === null) {
       console.log('auth2 was undefined. initializing manually.');
       this.auth2 = gapi.auth2.init({
-        client_id: '756248107036-4p4q1cl4fb2nmodsv47c50lmr0i3t83j.apps.googleusercontent.com'
+        client_id: '756248107036-4p4q1cl4fb2nmodsv47c50lmr0i3t83j.apps.googleusercontent.com',
+        scope: 'profile email https://www.googleapis.com/auth/calendar'
       });
     }
 
@@ -61,11 +68,17 @@ export class AuthenticationService {
   }
 
   setSignIn() {
+    console.log('set sign in');
+    if (this.auth2 === undefined) {
+      this.isSignedIn = false;
+    }
+
     this.isSignedIn = this.auth2.isSignedIn.get();
   }
 
-  async checkSignedIn(): Promise<boolean> {
-    await this.whenReady;
+  checkSignedIn(): boolean {
+    console.log('check signed in');
+    this.setSignIn();
 
     return this.isSignedIn;
   }

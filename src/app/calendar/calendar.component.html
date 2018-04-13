@@ -1,3 +1,12 @@
-my calendar
-
-
+<div *ngIf="events$ else loading">
+    <app-calendar-day *ngFor="let event of events$ | async" [event]="event" style="display: inline-grid"></app-calendar-day>
+    <p>
+        <button type="button" (click)="loadEvents()" class="btn plus-btn">
+            <span class="glyphicon glyphicon-plus"></span>
+            <span> Show more</span>
+        </button>
+    </p>
+</div>
+<ng-template #loading>
+    <div class="login-div center-div"><p>Loading events...</p></div>
+</ng-template>

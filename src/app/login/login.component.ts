@@ -16,7 +16,6 @@ declare var gapi: any;
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  // @Input()
   userSubscription: Subscription;
   routeSubscription: Subscription;
   navurlSubscription: Subscription;
@@ -30,13 +29,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     private app: AppComponent,
     private route: ActivatedRoute,
     private router: Router) {
-      app.title = 'Organizer for Yasmin';
+      app.titleSubject.next('Organizer for Yasmin');
       this.routeSubscription = route.data.subscribe((data) => {
         this.msg = data.msg;
-        // if (data.redirectUrl !== undefined) {
-        //   this.router.navigateByUrl(data.redirectUrl);
-        //   console.log(data.redirectUrl);
-        // }
       });
       console.log('NG CONSTRUCT');
     }
@@ -94,14 +89,13 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   getProfile() {
     this.userProfileService.updateProfile();
-    // this.navurlSubscription =
-      this.route.data.subscribe((data) => {
-        console.log('check1');
-        if (data.redirectUrl !== undefined) {
-          console.log('check2');
-          this.router.navigateByUrl(data.redirectUrl);
-        }
-      }).unsubscribe();
+    this.route.data.subscribe((data) => {
+      console.log('check1');
+      if (data.redirectUrl !== undefined) {
+        console.log('check2');
+        this.router.navigate([data.redirectUrl]);
+      }
+    }).unsubscribe();
   }
 
   renderSignIn() {
@@ -109,7 +103,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this.ref.detectChanges();
     gapi.signin2.render('my-gsignin2', {
-      'scope': 'profile email',
       'width': 240,
       'height': 50,
       'longtitle': true,

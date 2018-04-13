@@ -20,12 +20,10 @@ export class AuthGuardService implements CanActivate {
     if (this.authenticationService.isSignedIn) {
       this.router.config = this.router.config.map(
         (currRoute) => {
-          const newRoute = currRoute;
-          if (newRoute.path === 'login') {
-            newRoute.data = { msg: '' };
-            // newRoute.canActivate.push(AuthGuardService);
+          if (currRoute.path === 'login') {
+            currRoute.data = { msg: '' };
           }
-          return newRoute;
+          return currRoute;
         }
       );
 
@@ -34,14 +32,13 @@ export class AuthGuardService implements CanActivate {
 
       return true;
     }
+
     this.router.config = this.router.config.map(
       (currRoute) => {
-        const newRoute = currRoute;
-        if ((newRoute.path === 'login') && (url !== '/login')) {
-          newRoute.data = { msg: `you need to be logged in to enter ${url}`, redirectUrl: url };
-          // newRoute.canActivate.push(AuthGuardService);
+        if ((currRoute.path === 'login') && (url !== '/login')) {
+          currRoute.data = { msg: `you need to be logged in to enter ${url}`, redirectUrl: url };
         }
-        return newRoute;
+        return currRoute;
       }
     );
 

@@ -1,0 +1,9 @@
+.plus-btn {
+    font-size: medium;
+    background-color: #455cdf;
+    /* border-radius: 100%; */
+}
+
+.plus-btn > span {
+    color: #FFFFFF;
+}

@@ -1,3 +1,23 @@
-<p>
-  calendar-day works!
-</p>
+<div>
+  <div class="cal-title">
+    <span>{{event.summary}}</span>
+  </div>
+  <div class="cal-body">
+    <div *ngIf="event.location">
+      <p><span class="glyphicon glyphicon-map-marker"></span> {{event.location}}</p>
+    </div>
+    <div>
+      <p>{{event.details}}</p>
+    </div>
+    <div *ngIf="!event.isDayEvent; else dayEvent">
+      <p><span class="glyphicon glyphicon-time"></span> {{event.startDate | date:'short'}}</p>
+      <p>&nbsp;&nbsp;&nbsp;&nbsp;{{event.endDate | date:'short'}}</p>
+    </div>
+    <ng-template #dayEvent>
+      <div>
+          <p><span class="glyphicon glyphicon-time"></span> {{event.startDate | date:'shortDate'}}</p>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;{{event.endDate | date:'shortDate'}}</p>
+      </div>
+    </ng-template>
+  </div>
+</div>
