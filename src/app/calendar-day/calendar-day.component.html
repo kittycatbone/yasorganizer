@@ -1,6 +1,6 @@
 <div>
   <div class="cal-title">
-    <span>{{event.summary}}</span>
+    <a href="{{event.htmlLink}}" target="_blank"><span>{{event.summary}}</span></a>
   </div>
   <div class="cal-body">
     <div *ngIf="event.location">

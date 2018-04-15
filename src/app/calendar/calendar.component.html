@@ -1,6 +1,9 @@
 <div *ngIf="events$ else loading">
     <app-calendar-day *ngFor="let event of events$ | async" [event]="event" style="display: inline-grid"></app-calendar-day>
-    <p>
+    <div *ngIf="events$.value.length == 0">
+        <p>No events for now...</p>
+    </div>
+    <p style="padding-top:10px">
         <button type="button" (click)="loadEvents()" class="btn plus-btn">
             <span class="glyphicon glyphicon-plus"></span>
             <span> Show more</span>
@@ -8,5 +11,8 @@
     </p>
 </div>
 <ng-template #loading>
-    <div class="login-div center-div"><p>Loading events...</p></div>
+    <div class="login-div center-div">
+        <p>Loading events...</p>
+        <p><img [src]="loadingPic"></p>
+    </div>
 </ng-template>

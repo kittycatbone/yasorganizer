@@ -20,7 +20,8 @@
       <!-- Login menu - for logged in user -->
       <ul class="nav navbar-nav navbar-right" *ngIf="(userDetails)?.name; else guest">
         <li><span class="navbar-text">Hello {{userDetails.givenName}}!</span></li>
-        <li><img class="navbar-brand img-circle" alt="User" src="{{userDetails.imageUrl}}"></li>
+        <li><img class="navbar-brand img-circle" alt="User" src="{{userDetails.imageUrl}}" 
+              data-toggle="tooltip" data-placement="bottom" title="{{userDetails.name}} | {{userDetails.email}}"></li>
         <li class="dropdown">
            <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
               <span class="caret"></span>
@@ -29,7 +30,10 @@
           <ul class="dropdown-menu">
             <li class="navbar-text">
               <span>You are currently signed in as: </span>
+              <br/>
               <span style="font-weight: 1000;">{{userDetails.name}}</span>
+              <br/>
+              <span>{{userDetails.email}}</span>
             </li>
             <li><div class="login-button center-div" id="my-gsignin2"></div></li>
             <!-- <li><a type="button" href="#">

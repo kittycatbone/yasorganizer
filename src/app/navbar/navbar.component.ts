@@ -45,7 +45,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         if (this.authenticationService.isSignedIn) {
           console.log('rendering signin button');
           gapi.signin2.render('my-gsignin2', {
-            'width': 160,
+            'width': 180,
             'longtitle': false,
             'theme': '',
             'onsuccess': this.signIn.bind(this),
@@ -75,9 +75,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   getProfile() {
     this.userProfileService.updateProfile();
     this.route.data.subscribe((data) => {
-      console.log('check1');
       if (data.redirectUrl !== undefined) {
-        console.log('check2');
         this.router.navigate([data.redirectUrl]);
       }
     }).unsubscribe();
